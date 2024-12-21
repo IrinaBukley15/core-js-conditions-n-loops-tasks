@@ -419,16 +419,17 @@ function sortByAsc(arr) {
     const elem = finalArr[length];
     let i = start - 1;
 
-    for (let j = 0; j <= length - 1; j += 1) {
+    for (let j = start; j <= length - 1; j += 1) {
       if (finalArr[j] < elem) {
         i += 1;
-        [finalArr[i], finalArr[j]] = [finalArr[j], finalArr[i]];
+        finalArr[i] = finalArr[j];
+        finalArr[j] = finalArr[i];
       }
     }
+    finalArr[i + 1] = finalArr[length];
+    finalArr[length] = finalArr[i + 1];
 
-    [finalArr[i + 1], finalArr[length]] = [finalArr[length], finalArr[i + 1]];
-
-    sortByAsc(finalArr, 0, i + 1 - 1);
+    sortByAsc(finalArr, start, i + 1 - 1);
     sortByAsc(finalArr, i + 1 + 1, length);
   }
   return finalArr;
