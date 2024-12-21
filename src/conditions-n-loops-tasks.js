@@ -474,8 +474,28 @@ function sortByAsc(arr) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let resultStr = str;
+
+  for (let j = 0; j < iterations; j += 1) {
+    let left = '';
+    let right = '';
+
+    for (let i = 0; i < str.length; i += 1) {
+      if (i % 2) {
+        right += resultStr[i];
+      } else {
+        left += resultStr[i];
+      }
+    }
+    resultStr = left + right;
+
+    if (resultStr === str) {
+      j = iterations - (iterations % (j + 1)) - 1;
+    }
+  }
+
+  return resultStr;
 }
 
 /**
@@ -496,55 +516,15 @@ function shuffleChar(/* str, iterations */) {
  * @returns {number} The nearest larger number, or original number if none exists.
  */
 function getNearestBigger(number) {
-  const digits = [];
-  let originalNum = number;
+  const maxNum = [...String(number)].sort((a, b) => b - a).join('');
 
-  while (number > 0) {
-    const digit = number % 10;
-    digits.push(digit);
-    originalNum = Math.floor(number / 10);
-  }
-  let i;
-  for (i = 1; i <= digits.length; i += 1) {
-    if (digits[i] > digits[i - 1]) {
-      break;
-    }
-  }
-  if (i === digits.length) {
-    return originalNum;
-  }
-
-  const x = digits[i - 1];
-  let smallestIndex = i;
-
-  for (let j = i + 1; j < digits.length; j += 1) {
-    if (digits[j] > x && digits[j] < digits[smallestIndex]) {
-      smallestIndex = j;
+  for (let i = number + 1; i < maxNum; i += 1) {
+    if (maxNum === [...String(i)].sort((a, b) => b - a).join('')) {
+      return i;
     }
   }
 
-  let temp = digits[i - 1];
-  digits[i - 1] = digits[smallestIndex];
-  digits[smallestIndex] = temp;
-
-  let start = i;
-  let end = digits.length - 1;
-
-  while (start < end) {
-    temp = digits[start];
-    digits[start] = digits[end];
-    digits[end] = temp;
-    start += 1;
-    end -= 1;
-  }
-
-  let result = 0;
-  let multiplier = 1;
-  for (let k = 0; k < digits.length; k += 1) {
-    result += digits[k] * multiplier;
-    multiplier *= 10;
-  }
-  return result;
+  return number;
 }
 
 module.exports = {
