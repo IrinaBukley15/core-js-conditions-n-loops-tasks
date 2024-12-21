@@ -299,8 +299,22 @@ function isContainNumber(num, digit) {
  *  [2, 3, 9, 5] => 2       => 2 + 3 === 5 then balance element is 9 and its index = 2
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
-function getBalanceIndex(/* arr */) {
-  throw new Error('Not implemented');
+function getBalanceIndex(arr) {
+  let flag = -1;
+  for (let i = 0; i < arr.length; i += 1) {
+    let left = 0;
+    let right = 0;
+    for (let j = 0; j < i; j += 1) {
+      left += arr[j];
+    }
+    for (let k = i + 1; k < arr.length; k += 1) {
+      right += arr[k];
+    }
+    if (left === right) {
+      flag = i;
+    }
+  }
+  return flag;
 }
 
 /**
@@ -324,8 +338,44 @@ function getBalanceIndex(/* arr */) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const finalArr = new Array(size);
+  for (let i = 0; i < size; i += 1) {
+    finalArr[i] = new Array(size);
+  }
+  let left = 0;
+  let right = size - 1;
+  let top = 0;
+  let bottom = size - 1;
+  let cur = 1;
+
+  while (left <= right && top <= bottom) {
+    for (let i = left; i <= right; i += 1) {
+      finalArr[top][i] = cur;
+      cur += 1;
+    }
+    top += 1;
+
+    for (let i = top; i <= bottom; i += 1) {
+      finalArr[i][right] = cur;
+      cur += 1;
+    }
+    right -= 1;
+
+    for (let i = right; i >= left; i -= 1) {
+      finalArr[bottom][i] = cur;
+      cur += 1;
+    }
+    bottom -= 1;
+
+    for (let i = bottom; i >= top; i -= 1) {
+      finalArr[i][left] = cur;
+      cur += 1;
+    }
+    left += 1;
+  }
+
+  return finalArr;
 }
 
 /**
@@ -361,8 +411,27 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  const finalArr = arr;
+  const start = 0;
+  const length = arr.length - 1;
+  if (length > start) {
+    const elem = finalArr[length];
+    let i = start - 1;
+
+    for (let j = 0; j <= length - 1; j += 1) {
+      if (finalArr[j] < elem) {
+        i += 1;
+        [finalArr[i], finalArr[j]] = [finalArr[j], finalArr[i]];
+      }
+    }
+
+    [finalArr[i + 1], finalArr[length]] = [finalArr[length], finalArr[i + 1]];
+
+    sortByAsc(finalArr, 0, i + 1 - 1);
+    sortByAsc(finalArr, i + 1 + 1, length);
+  }
+  return finalArr;
 }
 
 /**
