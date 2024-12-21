@@ -412,27 +412,34 @@ function rotateMatrix(/* matrix */) {
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
 function sortByAsc(arr) {
-  const finalArr = arr;
-  const start = 0;
-  const length = arr.length - 1;
-  if (length > start) {
-    const elem = finalArr[length];
-    let i = start - 1;
-
-    for (let j = start; j <= length - 1; j += 1) {
-      if (finalArr[j] < elem) {
+  const resArr = arr;
+  function partition(low, high) {
+    const elem = resArr[high];
+    let i = low - 1;
+    for (let j = low; j < high; j += 1) {
+      if (resArr[j] <= elem) {
         i += 1;
-        finalArr[i] = finalArr[j];
-        finalArr[j] = finalArr[i];
+        const temp = resArr[i];
+        resArr[i] = resArr[j];
+        resArr[j] = temp;
       }
     }
-    finalArr[i + 1] = finalArr[length];
-    finalArr[length] = finalArr[i + 1];
-
-    sortByAsc(finalArr, start, i + 1 - 1);
-    sortByAsc(finalArr, i + 1 + 1, length);
+    const tempor = resArr[i + 1];
+    resArr[i + 1] = resArr[high];
+    resArr[high] = tempor;
+    return i + 1;
   }
-  return finalArr;
+
+  function sort(low, high) {
+    if (low < high) {
+      const index = partition(low, high);
+      sort(low, index - 1);
+      sort(index + 1, high);
+    }
+  }
+
+  sort(0, resArr.length - 1);
+  return resArr;
 }
 
 /**
@@ -473,8 +480,56 @@ function shuffleChar(/* str, iterations */) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const digits = [];
+  let originalNum = number;
+
+  while (number > 0) {
+    const digit = number % 10;
+    digits.push(digit);
+    originalNum = Math.floor(number / 10);
+  }
+  let i;
+  for (i = 1; i <= digits.length; i += 1) {
+    if (digits[i] > digits[i - 1]) {
+      break;
+    }
+  }
+  if (i === digits.length) {
+    return originalNum;
+  }
+
+  const x = digits[i - 1];
+  let smallestIndex = i;
+
+  for (let j = i + 1; j < digits.length; j += 1) {
+    if (digits[j] > x && digits[j] < digits[smallestIndex]) {
+      smallestIndex = j;
+    }
+  }
+
+  let temp = digits[i - 1];
+  digits[i - 1] = digits[smallestIndex];
+  digits[smallestIndex] = temp;
+
+  let start = i;
+  let end = digits.length - 1;
+
+  while (start < end) {
+    temp = digits[start];
+    digits[start] = digits[end];
+    digits[end] = temp;
+    start += 1;
+    end -= 1;
+  }
+
+  let result = 0;
+  let multiplier = 1;
+  for (let k = 0; k < digits.length; k += 1) {
+    result += digits[k] * multiplier;
+    multiplier *= 10;
+  }
+  return result;
 }
 
 module.exports = {
