@@ -519,9 +519,7 @@ function getNearestBigger(number) {
   const maxNum = [...String(number)].sort((a, b) => b - a).join('');
 
   for (let i = number + 1; i < maxNum; i += 1) {
-    if (maxNum === [...String(i)].sort((a, b) => b - a).join('')) {
-      return i;
-    }
+    if (maxNum === [...String(i)].sort((a, b) => b - a).join('')) return i;
   }
 
   return number;
